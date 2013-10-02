@@ -1,4 +1,5 @@
 require 'test/unit'
+require 'grlite'
 
 class GRLiteUnitTests < Test::Unit::TestCase
     def setup
