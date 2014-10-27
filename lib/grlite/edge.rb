@@ -35,24 +35,24 @@ module GRLite
     end
 
     class InEdge < PartialEdge #:nodoc: all
-        def <<(source); Edge.new(@graph, source, @rel, @node) end
-        def >>(_); raise "use << to complete an incoming edge" end
-        def *(_); raise "use << to complete an incoming edge" end
+        def <<(source)
+            Edge.new(@graph, source, @rel, @node)
+        end
+        def >>(other)
+            left = Edge.new(@graph, @node, @rel, other)
+            right = Edge.new(@graph, other, @rel, @node)
+            return left, right
+        end
     end
 
     class OutEdge < PartialEdge #:nodoc: all
-        def >>(dest); Edge.new(@graph, @node, @rel, dest) end
-        def <<(_); raise "use >> to complete an outgoing edge" end
-        def *(_); raise "use >> to complete an outgoing edge" end
-    end
-
-    class BiEdge < PartialEdge #:nodoc: all
-        def <<(_); raise "use ** to complete an bidirectional edge" end
-        def >>(_); raise "use ** to complete an bidirectional edge" end
-        def *(other)
-            a = Edge.new(@graph, @node, @rel, other)
-            b = Edge.new(@graph, other, @rel, @node)
-            return a, b
+        def >>(dest)
+            Edge.new(@graph, @node, @rel, dest)
+        end
+        def <<(other)
+            left = Edge.new(@graph, @node, @rel, other)
+            right = Edge.new(@graph, other, @rel, @node)
+            return left, right
         end
     end
 end

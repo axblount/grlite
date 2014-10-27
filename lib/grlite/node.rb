@@ -38,7 +38,6 @@ module GRLite
 
         def <<(rel); InEdge.new(@graph, self, @graph.rel_id(rel)) end
         def >>(rel); OutEdge.new(@graph, self, @graph.rel_id(rel)) end
-        def *(rel); BiEdge.new(@graph, self, @graph.rel_id(rel)) end
 
         def is?(rel, node)
             rel_id = @graph.rel_id(rel)

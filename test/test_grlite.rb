@@ -19,7 +19,7 @@ class GRLiteUnitTests < Test::Unit::TestCase
         b = @graph.create_node
         c = @graph.create_node
 
-        a * :friend * b
+        a << :friend >> b
         b << :friend << c
         a >> :enemy >> c
 
@@ -27,6 +27,7 @@ class GRLiteUnitTests < Test::Unit::TestCase
         assert(b.is?(:friend, a))
         assert(c.is?(:friend, b))
         assert(a.is?(:enemy, c))
+        assert(!a.is?(:friend, c))
         assert(!b.is?(:friend, c))
         assert(!c.is?(:enemy, a))
     end
