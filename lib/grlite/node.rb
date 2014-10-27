@@ -36,17 +36,19 @@ module GRLite
 
         def delete!; raise 'TODO' end
 
-        def <<(rel); InEdge.new(@graph, self, @graph.rel_id(rel)) end
-        def >>(rel); OutEdge.new(@graph, self, @graph.rel_id(rel)) end
+        def <<(rel); InEdge.new(@graph, self, @graph.rel(rel)) end
+        def >>(rel); OutEdge.new(@graph, self, @graph.rel(rel)) end
 
         def is?(rel, node)
-            rel_id = @graph.rel_id(rel)
-            1 <= @graph.db.get_first_value(<<-SQL, :src => @id, :dest => node.id, :rel => rel_id)
+            if not rel.is_a? Rel
+                rel = @graph.rel(rel)
+            end
+            1 <= @graph.db.get_first_value(<<-SQL, :src => @id, :dest => node.id, :rel_id => rel.id)
                 SELECT COUNT(*)
                 FROM grlite_edges
                 WHERE source_node_id = :src
                   AND destination_node_id = :dest
-                  AND relation_id = :rel
+                  AND relation_id = :rel_id
             SQL
         end
     end

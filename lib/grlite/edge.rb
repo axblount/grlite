@@ -4,12 +4,12 @@ module GRLite
 
         def initialize(graph, src, rel, dest)
             @graph = graph
-            @graph.db.execute(<<-SQL, :src => src.id, :rel => rel, :dest => dest.id)
+            @graph.db.execute(<<-SQL, :src => src.id, :rel_id => rel.id, :dest => dest.id)
                 INSERT INTO grlite_edges(
                     source_node_id,
                     destination_node_id,
                     relation_id)
-                VALUES (:src, :dest, :rel)
+                VALUES (:src, :dest, :rel_id)
             SQL
             @id = @graph.db.last_insert_row_id
         end

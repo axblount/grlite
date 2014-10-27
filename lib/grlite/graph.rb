@@ -1,6 +1,7 @@
 require 'sqlite3'
 require 'grlite/schema'
 require 'grlite/node'
+require 'grlite/rel'
 
 module GRLite
     class Graph
@@ -33,21 +34,21 @@ module GRLite
 
         # ensures that the given relation is in the
         # relations table and returns its id
-        # rel will likely be a symbol
-        def rel_id(rel)
-            id = @db.get_first_value(<<-SQL, :name => rel.to_s)
+        # name will likely be a symbol
+        def rel(name)
+            id = @db.get_first_value(<<-SQL, :name => name.to_s)
                 SELECT id
                 FROM grlite_relations
                 WHERE name = :name
             SQL
             if id == nil
-                @db.execute(<<-SQL, :name => rel.to_s)
+                @db.execute(<<-SQL, :name => name.to_s)
                     INSERT INTO grlite_relations(name)
                     VALUES (:name)
                 SQL
                 id = @db.last_insert_row_id
             end
-            return id
+            return Rel.new(self, name, id)
         end
 
         def close
